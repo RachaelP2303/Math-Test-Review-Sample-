@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NZ Curriculum Phase 3 Mathematics Assessment</title>
+    <style>
+        :root {
+            --primary: #0066cc;
+            --primary-dark: #004b99;
+            --secondary: #10b981;
+            --bg-light: #f3f4f6;
+            --card-bg: #ffffff;
+            --text: #1f2937;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .header-meta {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--text-muted);
+        }
+
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: var(--border);
+            border-radius: 8px;
+            height: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+        }
+
+        .question-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .diagram-container {
+            text-align: center;
+            margin: 20px 0;
+            background: #fafafa;
+            border: 1px dashed var(--border);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .diagram-container svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .options-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .option-item {
+            margin-bottom: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #f0f7ff;
+            border-color: var(--primary);
+        }
+
+        .option-label input {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .results-section {
+            display: none;
+        }
+
+        .score-box {
+            background: #e0f2fe;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .score-box h2 {
+            font-size: 2rem;
+            color: var(--primary-dark);
+        }
+
+        .analysis-box {
+            background: #f9fafb;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .strand-breakdown {
+            margin-top: 15px;
+        }
+
+        .strand-item {
+            margin-bottom: 10px;
+        }
+
+        .strand-name {
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .strand-bar-bg {
+            background: var(--border);
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+
+        .strand-bar-fill {
+            background: var(--secondary);
+            height: 100%;
+            width: 0%;
+        }
+
+        .admin-link {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            max-height: 300px;
+            margin-top: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--bg-light);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <span class="admin-link" onclick="openAdminModal()">Teacher Portal</span>
+
+    <!-- Student Registration View -->
+    <div id="start-screen">
+        <div class="header">
+            <div>
+                <h1>NZ Mathematics Diagnostic Test</h1>
+                <p>Phase 3 (Years 5–6 / Level 3)</p>
+            </div>
+        </div>
+        <p style="margin-bottom: 20px;">Welcome! Please enter your details below to start your test.</p>
+        <div class="form-group">
+            <label for="student-name">Full Name:</label>
+            <input type="text" id="student-name" placeholder="e.g. Manaia Smith" required>
+        </div>
+        <div class="form-group">
+            <label for="student-year">Year Level:</label>
+            <input type="text" id="student-year" placeholder="e.g. Year 5 or Year 6" required>
+        </div>
+        <button class="btn" onclick="startTest()">Start Assessment</button>
+    </div>
+
+    <!-- Test View -->
+    <div id="test-screen" style="display: none;">
+        <div class="header">
+            <div>
+                <h1 id="test-header-title">Question 1 of 30</h1>
+            </div>
+            <div class="header-meta">
+                <span id="display-student-info"></span>
+            </div>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div id="questions-wrapper">
+            <!-- Questions rendered here -->
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" id="prev-btn" onclick="prevQuestion()" disabled>Previous</button>
+            <button class="btn" id="next-btn" onclick="nextQuestion()">Next Question</button>
+        </div>
+    </div>
+
+    <!-- Feedback and Analysis Screen -->
+    <div id="results-screen" class="results-section">
+        <div class="header">
+            <h1>Assessment Results</h1>
+            <div class="header-meta" id="result-date"></div>
+        </div>
+
+        <div class="score-box">
+            <h2 id="final-score">0 / 30</h2>
+            <p id="score-percentage">0% Correct</p>
+        </div>
+
+        <div class="analysis-box">
+            <h3>Curriculum Position & Feedback</h3>
+            <p id="overall-feedback" style="margin-top: 10px; line-height: 1.5;"></p>
+
+            <h4 style="margin-top: 20px;">Strand Performance Breakdown</h4>
+            <div class="strand-breakdown" id="strand-breakdown">
+                <!-- Strand breakdowns injected here -->
+            </div>
+        </div>
+
+        <button class="btn" onclick="window.print()">Print / Save Results</button>
+    </div>
+</div>
+
+<!-- Teacher Portal Modal (PIN Protected: 1335) -->
+<div class="modal" id="admin-modal">
+    <div class="modal-content">
+        <h2>Teacher Portal</h2>
+        <div id="admin-login-view">
+            <p style="margin: 10px 0;">Enter security PIN to access student results:</p>
+            <div class="form-group">
+                <input type="password" id="admin-pin" placeholder="Enter PIN">
+            </div>
+            <button class="btn" onclick="verifyPin()">Login</button>
+            <button class="btn btn-secondary" onclick="closeAdminModal()">Cancel</button>
+        </div>
+        <div id="admin-data-view" style="display: none;">
+            <h3>Stored Class Results</h3>
+            <div class="table-responsive">
+                <table id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Year</th>
+                            <th>Score</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-table-body">
+                        <!-- Teacher data dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <button class="btn" onclick="exportCSV()">Download CSV Report</button>
+            <button class="btn btn-secondary" onclick="closeAdminModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Target URL for your Google Apps Script Backend
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzBY0m5a7h41WBcFh4hvIKIIy1QMcKVVyFT_wSK0DFAOxWJLYy9Ei9yQuirZOoUpePQuQ/exec";
+
+// 30 Phase 3 NZ Curriculum Questions
+const testQuestions = [
+    {
+        id: 1,
+        strand: "Number",
+        question: "What is the value of the digit 7 in the number 472,805?",
+        diagram: null,
+        options: ["700", "7,000", "70,000", "700,000"],
+        answer: 2 // 70,000 (Option C)
+    },
+    {
+        id: 2,
+        strand: "Number",
+        question: "Solve the addition: 648 + 357 =",
+        diagram: null,
+        options: ["1,005", "1,003", "995", "1,015"],
+        answer: 0 // 1,005 (Option A)
+    },
+    {
+        id: 3,
+        strand: "Number",
+        question: "Which fraction is equivalent to 3/4?",
+        diagram: null,
+        options: ["5/8", "6/8", "9/16", "4/3"],
+        answer: 1 // 6/8 (Option B)
+    },
+    {
+        id: 4,
+        strand: "Number",
+        question: "Find the result of 72 ÷ 8.",
+        diagram: null,
+        options: ["8", "7", "6", "9"],
+        answer: 3 // 9 (Option D)
+    },
+    {
+        id: 5,
+        strand: "Number",
+        question: "What is 0.6 written as a simple fraction?",
+        diagram: null,
+        options: ["1/6", "3/5", "6/100", "2/3"],
+        answer: 1 // 3/5 (Option B)
+    },
+    {
+        id: 6,
+        strand: "Number",
+        question: "In the fraction diagram below, what fraction of the shape is shaded?",
+        diagram: `<svg width="200" height="60" viewBox="0 0 200 60">
+            <rect x="10" y="10" width="30" height="40" fill="#0066cc" stroke="#333"/>
+            <rect x="40" y="10" width="30" height="40" fill="#0066cc" stroke="#333"/>
+            <rect x="70" y="10" width="30" height="40" fill="#0066cc" stroke="#333"/>
+            <rect x="100" y="10" width="30" height="40" fill="#fff" stroke="#333"/>
+            <rect x="130" y="10" width="30" height="40" fill="#fff" stroke="#333"/>
+        </svg>`,
+        options: ["2/5", "3/5", "3/4", "5/3"],
+        answer: 1 // 3/5 (Option B)
+    },
+    {
+        id: 7,
+        strand: "Number",
+        question: "If a box contains 24 chocolates and you eat 1/3 of them, how many are remaining?",
+        diagram: null,
+        options: ["8", "12", "18", "16"],
+        answer: 3 // 16 (Option D)
+    },
+    {
+        id: 8,
+        strand: "Algebra",
+        question: "Identify the next number in the pattern: 4, 9, 14, 19, ___",
+        diagram: null,
+        options: ["23", "24", "25", "29"],
+        answer: 1 // 24 (Option B)
+    },
+    {
+        id: 9,
+        strand: "Algebra",
+        question: "If 4 × 'n' = 36, what is the value of 'n'?",
+        diagram: null,
+        options: ["9", "8", "12", "14"],
+        answer: 0 // 9 (Option A)
+    },
+    {
+        id: 10,
+        strand: "Algebra",
+        question: "Which rule describes the relationship in this table?\nInput: [2, 4, 6] -> Output: [7, 11, 15]",
+        diagram: null,
+        options: ["Multiply by 2, add 5", "Multiply by 3, add 1", "Multiply by 2, add 3", "Add 5"],
+        answer: 2 // Multiply by 2, add 3 (Option C)
+    },
+    {
+        id: 11,
+        strand: "Algebra",
+        question: "What is the formula to find the perimeter (P) of a square with side length 's'?",
+        diagram: null,
+        options: ["P = s + 4", "P = s × s", "P = 2 × s", "P = 4 × s"],
+        answer: 3 // P = 4 * s (Option D)
+    },
+    {
+        id: 12,
+        strand: "Algebra",
+        question: "Evaluate the expression when x = 5: (3 × x) - 4",
+        diagram: null,
+        options: ["11", "15", "19", "7"],
+        answer: 0 // 11 (Option A)
+    },
+    {
+        id: 13,
+        strand: "Geometry",
+        question: "What type of angle is shown in the diagram below?",
+        diagram: `<svg width="150" height="100" viewBox="0 0 150 100">
+            <path d="M 20 80 L 120 80 L 70 20" fill="none" stroke="#0066cc" stroke-width="3"/>
+            <path d="M 40 80 A 20 20 0 0 0 32 68" fill="none" stroke="#e11d48" stroke-width="2"/>
+        </svg>`,
+        options: ["Right angle", "Acute angle", "Obtuse angle", "Reflex angle"],
+        answer: 1 // Acute angle (Option B)
+    },
+    {
+        id: 14,
+        strand: "Geometry",
+        question: "How many lines of symmetry does a regular hexagon have?",
+        diagram: null,
+        options: ["4", "5", "6", "8"],
+        answer: 2 // 6 (Option C)
+    },
+    {
+        id: 15,
+        strand: "Geometry",
+        question: "On a grid, point A is at (2, 3). If you move point A 3 units right and 2 units up, what are the new coordinates?",
+        diagram: null,
+        options: ["(5, 5)", "(5, 1)", "(1, 5)", "(6, 6)"],
+        answer: 0 // (5, 5) (Option A)
+    },
+    {
+        id: 16,
+        strand: "Geometry",
+        question: "Which 3D shape has 5 faces, 8 edges, and 5 vertices?",
+        diagram: null,
+        options: ["Triangular Prism", "Cube", "Square-based Pyramid", "Pentagonal Prism"],
+        answer: 2 // Square-based Pyramid (Option C)
+    },
+    {
+        id: 17,
+        strand: "Geometry",
+        question: "What is the name of a triangle with three sides of equal length?",
+        diagram: null,
+        options: ["Isosceles", "Scalene", "Right-angled", "Equilateral"],
+        answer: 3 // Equilateral (Option D)
+    },
+    {
+        id: 18,
+        strand: "Measurement",
+        question: "What is the area of a rectangle with a length of 8 cm and a width of 5 cm?",
+        diagram: `<svg width="160" height="100" viewBox="0 0 160 100">
+            <rect x="20" y="20" width="120" height="60" fill="#e0f2fe" stroke="#0066cc" stroke-width="2"/>
+            <text x="80" y="15" text-anchor="middle" font-size="12">8 cm</text>
+            <text x="10" y="55" text-anchor="middle" font-size="12">5 cm</text>
+        </svg>`,
+        options: ["26 cm²", "40 cm²", "13 cm²", "40 cm"],
+        answer: 1 // 40 cm² (Option B)
+    },
+    {
+        id: 19,
+        strand: "Measurement",
+        question: "Convert 2.5 kilometres into metres.",
+        diagram: null,
+        options: ["250 m", "2,500 m", "25,000 m", "25 m"],
+        answer: 1 // 2,500 m (Option B)
+    },
+    {
+        id: 20,
+        strand: "Measurement",
+        question: "A digital clock shows 14:35. What time is this in 12-hour standard time?",
+        diagram: null,
+        options: ["2:35 AM", "4:35 PM", "2:35 PM", "12:35 PM"],
+        answer: 2 // 2:35 PM (Option C)
+    },
+    {
+        id: 21,
+        strand: "Measurement",
+        question: "Calculate the volume of a rectangular prism with length 4 cm, width 3 cm, and height 2 cm.",
+        diagram: null,
+        options: ["24 cm³", "9 cm³", "14 cm³", "20 cm³"],
+        answer: 0 // 24 cm³ (Option A)
+    },
+    {
+        id: 22,
+        strand: "Measurement",
+        question: "How many millilitres are in 1.75 litres?",
+        diagram: null,
+        options: ["175 mL", "17,500 mL", "1,750 mL", "17.5 mL"],
+        answer: 2 // 1,750 mL (Option C)
+    },
+    {
+        id: 23,
+        strand: "Statistics",
+        question: "Find the mean (average) of these numbers: 6, 8, 7, 9, 10",
+        diagram: null,
+        options: ["7", "8", "9", "40"],
+        answer: 1 // 8 (Option B)
+    },
+    {
+        id: 24,
+        strand: "Statistics",
+        question: "What is the median of the following set: 3, 5, 7, 8, 12, 13, 15?",
+        diagram: null,
+        options: ["7", "8", "9", "12"],
+        answer: 1 // 8 (Option B)
+    },
+    {
+        id: 25,
+        strand: "Statistics",
+        question: "Based on the bar graph below, how many more students chose Cats than Dogs?",
+        diagram: `<svg width="220" height="120" viewBox="0 0 220 120">
+            <line x1="30" y1="100" x2="200" y2="100" stroke="#333" stroke-width="2"/>
+            <line x1="30" y1="20" x2="30" y2="100" stroke="#333" stroke-width="2"/>
+            <rect x="50" y="40" width="30" height="60" fill="#0066cc"/>
+            <text x="65" y="115" font-size="10" text-anchor="middle">Dogs</text>
+            <rect x="110" y="20" width="30" height="80" fill="#10b981"/>
+            <text x="125" y="115" font-size="10" text-anchor="middle">Cats</text>
+        </svg>`,
+        options: ["2", "4", "6", "10"],
+        answer: 0 // 2 (Option A)
+    },
+    {
+        id: 26,
+        strand: "Statistics",
+        question: "What is the range of these numbers: 12, 4, 19, 8, 15?",
+        diagram: null,
+        options: ["11", "15", "19", "23"],
+        answer: 1 // 15 (Option B)
+    },
+    {
+        id: 27,
+        strand: "Probability",
+        question: "A fair 6-sided die is rolled. What is the probability of rolling an even number?",
+        diagram: null,
+        options: ["1/6", "1/3", "1/2", "2/3"],
+        answer: 2 // 1/2 (Option C)
+    },
+    {
+        id: 28,
+        strand: "Probability",
+        question: "A bag contains 5 red marbles and 15 blue marbles. What is the probability of randomly picking a red marble?",
+        diagram: null,
+        options: ["1/4", "1/3", "1/5", "3/4"],
+        answer: 0 // 1/4 (Option A)
+    },
+    {
+        id: 29,
+        strand: "Probability",
+        question: "If you flip two fair coins at the same time, what is the probability of getting two heads?",
+        diagram: null,
+        options: ["1/2", "1/4", "3/4", "1/3"],
+        answer: 1 // 1/4 (Option B)
+    },
+    {
+        id: 30,
+        strand: "Probability",
+        question: "An event that is certain to happen has a probability value of:",
+        diagram: null,
+        options: ["0", "0.5", "1", "100"],
+        answer: 2 // 1 (Option C)
+    }
+];
+
+let currentQuestionIndex = 0;
+let userAnswers = {};
+let studentDetails = { name: "", year: "" };
+
+function startTest() {
+    const name = document.getElementById('student-name').value.trim();
+    const year = document.getElementById('student-year').value.trim();
+
+    if (!name || !year) {
+        alert("Please enter your name and year level to begin.");
+        return;
+    }
+
+    studentDetails.name = name;
+    studentDetails.year = year;
+
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('test-screen').style.display = 'block';
+    document.getElementById('display-student-info').innerText = `${studentDetails.name} (${studentDetails.year})`;
+
+    renderQuestions();
+    showQuestion(0);
+}
+
+function renderQuestions() {
+    const wrapper = document.getElementById('questions-wrapper');
+    wrapper.innerHTML = '';
+
+    testQuestions.forEach((q, index) => {
+        const card = document.createElement('div');
+        card.className = `question-card ${index === 0 ? 'active' : ''}`;
+        card.id = `question-${index}`;
+
+        let diagramHtml = q.diagram ? `<div class="diagram-container">${q.diagram}</div>` : '';
+
+        let optionsHtml = q.options.map((opt, optIndex) => `
+            <li class="option-item">
+                <label class="option-label">
+                    <input type="radio" name="q_${index}" value="${optIndex}" onchange="recordAnswer(${index}, ${optIndex})">
+                    <span>${String.fromCharCode(65 + optIndex)}. ${opt}</span>
+                </label>
+            </li>
+        `).join('');
+
+        card.innerHTML = `
+            <div class="question-title">${q.question}</div>
+            ${diagramHtml}
+            <ul class="options-list">${optionsHtml}</ul>
+        `;
+
+        wrapper.appendChild(card);
+    });
+}
+
+function showQuestion(index) {
+    const cards = document.querySelectorAll('.question-card');
+    cards.forEach(card => card.classList.remove('active'));
+    cards[index].classList.add('active');
+
+    currentQuestionIndex = index;
+
+    const progress = ((index + 1) / testQuestions.length) * 100;
+    document.getElementById('progress-bar').style.width = `${progress}%`;
+    document.getElementById('test-header-title').innerText = `Question ${index + 1} of ${testQuestions.length}`;
+
+    document.getElementById('prev-btn').disabled = (index === 0);
+    if (index === testQuestions.length - 1) {
+        document.getElementById('next-btn').innerText = "Submit Test";
+    } else {
+        document.getElementById('next-btn').innerText = "Next Question";
+    }
+}
+
+function recordAnswer(questionIdx, optionIdx) {
+    userAnswers[questionIdx] = optionIdx;
+}
+
+function prevQuestion() {
+    if (currentQuestionIndex > 0) {
+        showQuestion(currentQuestionIndex - 1);
+    }
+}
+
+function nextQuestion() {
+    if (userAnswers[currentQuestionIndex] === undefined) {
+        if (!confirm("You haven't selected an answer for this question. Do you want to move on anyway?")) {
+            return;
+        }
+    }
+
+    if (currentQuestionIndex < testQuestions.length - 1) {
+        showQuestion(currentQuestionIndex + 1);
+    } else {
+        submitTest();
+    }
+}
+
+function submitTest() {
+    document.getElementById('test-screen').style.display = 'none';
+    document.getElementById('results-screen').style.display = 'block';
+    document.getElementById('result-date').innerText = new Date().toLocaleDateString();
+
+    let score = 0;
+    let strandScores = {};
+    let strandTotals = {};
+
+    testQuestions.forEach((q, idx) => {
+        if (!strandScores[q.strand]) {
+            strandScores[q.strand] = 0;
+            strandTotals[q.strand] = 0;
+        }
+        strandTotals[q.strand]++;
+
+        if (userAnswers[idx] === q.answer) {
+            score++;
+            strandScores[q.strand]++;
+        }
+    });
+
+    const percentage = Math.round((score / testQuestions.length) * 100);
+    document.getElementById('final-score').innerText = `${score} / ${testQuestions.length}`;
+    document.getElementById('score-percentage').innerText = `${percentage}% Overall Accuracy`;
+
+    // Diagnostic Feedback based on NZ Curriculum Phase 3 expectations
+    let feedback = "";
+    if (percentage >= 85) {
+        feedback = `<strong>Consolidated Phase 3 Standard:</strong> ${studentDetails.name} has demonstrated an advanced mastery of Phase 3 concepts in the NZ Curriculum. Ready for extension into Phase 4 (Years 7–8) mathematics.`;
+    } else if (percentage >= 60) {
+        feedback = `<strong>Achieving Phase 3 Standard:</strong> ${studentDetails.name} shows a strong working knowledge across Phase 3 curriculum standards, with minor areas needing consolidation prior to Phase 4.`;
+    } else if (percentage >= 40) {
+        feedback = `<strong>Developing Phase 3 Standard:</strong> ${studentDetails.name} demonstrates foundational skills in Phase 3, but requires targeted support in specific mathematical strands.`;
+    } else {
+        feedback = `<strong>Beginning Phase 3 Standard:</strong> ${studentDetails.name} is currently working towards Phase 3 outcomes. Focused intervention on core Number and Measurement concepts is recommended.`;
+    }
+
+    document.getElementById('overall-feedback').innerHTML = feedback;
+
+    // Render strand breakdown bars
+    const breakdownContainer = document.getElementById('strand-breakdown');
+    breakdownContainer.innerHTML = '';
+
+    for (let strand in strandTotals) {
+        const strandPct = Math.round((strandScores[strand] / strandTotals[strand]) * 100);
+        breakdownContainer.innerHTML += `
+            <div class="strand-item">
+                <div class="strand-name">
+                    <span>${strand}</span>
+                    <span>${strandScores[strand]} / ${strandTotals[strand]} (${strandPct}%)</span>
+                </div>
+                <div class="strand-bar-bg">
+                    <div class="strand-bar-fill" style="width: ${strandPct}%;"></div>
+                </div>
+            </div>
+        `;
+    }
+
+    // 1. Save data locally to the Teacher Portal inside the browser
+    saveResultLocally(studentDetails.name, studentDetails.year, score, percentage);
+
+    // 2. Post data directly to your Google Sheet backend via your Apps Script URL
+    sendToGoogleSheet(studentDetails.name, studentDetails.year, `${score}/30`, `${percentage}%`);
+}
+
+function sendToGoogleSheet(name, year, score, percentage) {
+    const payload = {
+        name: name,
+        year: year,
+        score: score,
+        percentage: percentage,
+        date: new Date().toLocaleDateString()
+    };
+
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    }).then(() => {
+        console.log("Results successfully posted to Google Sheet.");
+    }).catch(err => {
+        console.error("Error submitting to Google Sheet:", err);
+    });
+}
+
+function saveResultLocally(name, year, score, percentage) {
+    const newResult = {
+        name: name,
+        year: year,
+        score: `${score}/30 (${percentage}%)`,
+        date: new Date().toLocaleDateString()
+    };
+
+    let existingResults = JSON.parse(localStorage.getItem('nz_math_results') || '[]');
+    existingResults.push(newResult);
+    localStorage.setItem('nz_math_results', JSON.stringify(existingResults));
+}
+
+function openAdminModal() {
+    document.getElementById('admin-modal').style.display = 'flex';
+    document.getElementById('admin-login-view').style.display = 'block';
+    document.getElementById('admin-data-view').style.display = 'none';
+}
+
+function closeAdminModal() {
+    document.getElementById('admin-modal').style.display = 'none';
+}
+
+function verifyPin() {
+    const pin = document.getElementById('admin-pin').value;
+    if (pin === "1335") {
+        document.getElementById('admin-login-view').style.display = 'none';
+        document.getElementById('admin-data-view').style.display = 'block';
+        loadAdminTable();
+    } else {
+        alert("Incorrect PIN. Access Denied.");
+    }
+}
+
+function loadAdminTable() {
+    const tbody = document.getElementById('results-table-body');
+    tbody.innerHTML = '';
+    let results = JSON.parse(localStorage.getItem('nz_math_results') || '[]');
+
+    results.forEach(res => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${res.name}</td>
+                <td>${res.year}</td>
+                <td>${res.score}</td>
+                <td>${res.date}</td>
+            </tr>
+        `;
+    });
+}
+
+function exportCSV() {
+    let results = JSON.parse(localStorage.getItem('nz_math_results') || '[]');
+    if (results.length === 0) {
+        alert("No student results available to export yet.");
+        return;
+    }
+
+    let csvContent = "data:text/csv;charset=utf-8,Name,Year,Score,Date\n";
+    results.forEach(r => {
+        csvContent += `"${r.name}","${r.year}","${r.score}","${r.date}"\n`;
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "NZ_Maths_Phase3_Results.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+</script>
+</body>
+</html>
